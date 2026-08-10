@@ -263,8 +263,8 @@ func TestDecodeWAV_UnknownChunksSkipped(t *testing.T) {
 	binary.LittleEndian.PutUint16(pcm[2:4], 0x2000)
 
 	fmtSize := 16
-	unknownPayload := []byte{0x01, 0x02, 0x03, 0x04}
-	unknownChunkSize := 8 + len(unknownPayload)
+	unknownPayload := []byte{0x01, 0x02, 0x03}
+	unknownChunkSize := 8 + len(unknownPayload) + 1 // odd chunks have one pad byte
 	dataSize := len(pcm)
 	totalSize := 4 + (8 + fmtSize) + unknownChunkSize + (8 + dataSize)
 
@@ -287,6 +287,7 @@ func TestDecodeWAV_UnknownChunksSkipped(t *testing.T) {
 	buf.WriteString("JUNK")
 	writeLEUint32(&buf, uint32(len(unknownPayload)))
 	buf.Write(unknownPayload)
+	buf.WriteByte(0) // word-alignment padding is not part of the declared size
 
 	// data chunk
 	buf.WriteString("data")

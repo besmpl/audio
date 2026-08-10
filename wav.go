@@ -72,11 +72,6 @@ func DecodeWAV(data []byte) (*WAVDecoder, error) {
 		}
 		chunkDataEnd := chunkDataStart + chunkSize
 
-		if chunkDataEnd > len(data) {
-			// Truncated chunk -- use what we have
-			chunkDataEnd = len(data)
-		}
-
 		switch chunkID {
 		case "fmt ":
 			if err := d.parseFmtChunk(data[chunkDataStart:chunkDataEnd]); err != nil {
