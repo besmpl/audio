@@ -67,7 +67,7 @@ func DecodeWAV(data []byte) (*WAVDecoder, error) {
 		// systems.
 		remaining := len(data) - chunkDataStart
 		chunkSize := remaining
-		if uint64(declaredChunkSize) < uint64(remaining) {
+		if uint64(declaredChunkSize) < uint64(uint(remaining)) {
 			chunkSize = int(declaredChunkSize)
 		}
 		chunkDataEnd := chunkDataStart + chunkSize
